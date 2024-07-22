@@ -1,0 +1,31 @@
+{
+  "name": "apollo-client",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A simple Nuxt instance using Apollo Client for Jumbo's GraphQL workshops",
+  "author": "Mark van Alphen <mark.vanalphen@jumbo.com>",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "codegen": "graphql-codegen --config codegen.ts",
+    "format": "prettier '**/*.{js,cjs,mjs,ts,json,mdx}' --check",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@nuxt/eslint": "^0.3.13",
+    "nuxt": "^3.12.3",
+    "vue": "^3.4.32"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript-vue-apollo": "^4.1.1",
+    "@nuxtjs/apollo": "^5.0.0-alpha.14",
+    "@vue/apollo-composable": "^4.0.2",
+    "prettier": "^3.3.3"
+  }
+}
