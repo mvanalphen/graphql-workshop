@@ -1,0 +1,12 @@
+{
+  "name": "apollo-router",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A simple Apollo Router instance for Jumbo's GraphQL workshops",
+  "scripts": {
+    "dev": "rover dev --supergraph-config ./supergraph.yaml --router-config router.yaml --log info --elv2-license=accept"
+  },
+  "author": "Mark van Alphen <mark.vanalphen@jumbo.com>",
+  "license": "UNLICENSED",
+  "type": "module"
+}

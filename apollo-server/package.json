@@ -1,0 +1,51 @@
+{
+  "name": "apollo-server",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A simple Apollo Server instance for Jumbo's GraphQL workshops",
+  "main": "index.ts",
+  "scripts": {
+    "build": "webpack",
+    "dev": "concurrently \"nodemon\" \"npm run codegen -- --watch\"",
+    "codegen": "graphql-codegen --config codegen.ts",
+    "format": "prettier '**/*.{js,cjs,mjs,ts,json,mdx}' --check",
+    "lint": "eslint --ext .ts,.js,.cjs,.mjs --ignore-path .gitignore ."
+  },
+  "author": "Mark van Alphen <mark.vanalphen@jumbo.com>",
+  "license": "UNLICENSED",
+  "type": "module",
+  "dependencies": {
+    "@apollo/datasource-rest": "^6.3.0",
+    "@apollo/server": "^4.10.4",
+    "@apollo/subgraph": "^2.8.3",
+    "@graphql-tools/graphql-file-loader": "^8.0.1",
+    "@graphql-tools/load": "^8.0.2",
+    "@graphql-tools/utils": "^10.3.2",
+    "dataloader": "^2.2.2",
+    "graphql": "^16.9.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-resolvers": "^4.2.1",
+    "@graphql-eslint/eslint-plugin": "^3.20.1",
+    "@parcel/watcher": "^2.4.1",
+    "@types/node": "^20.14.11",
+    "@typescript-eslint/eslint-plugin": "^7.16.1",
+    "@typescript-eslint/parser": "^7.16.1",
+    "clean-webpack-plugin": "^4.0.0",
+    "concurrently": "^8.2.2",
+    "copy-webpack-plugin": "^12.0.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.3",
+    "ts-loader": "^9.5.1",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
