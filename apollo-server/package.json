@@ -21,7 +21,6 @@
     "@graphql-tools/graphql-file-loader": "^8.0.1",
     "@graphql-tools/load": "^8.0.2",
     "@graphql-tools/utils": "^10.3.2",
-    "dataloader": "^2.2.2",
     "graphql": "^16.9.0"
   },
   "devDependencies": {
