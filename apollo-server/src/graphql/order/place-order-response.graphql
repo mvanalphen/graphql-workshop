@@ -1,0 +1,5 @@
+type PlaceOrderResponse {
+  order: Order
+  code: Int!
+  success: Boolean!
+}

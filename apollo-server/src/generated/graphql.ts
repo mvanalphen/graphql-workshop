@@ -41,17 +41,27 @@ export class Customer {
 }
 
 export class Mutation {
-  placeOrder?: Maybe<Order>;
+  placeOrder: PlaceOrderResponse;
 }
 
 export type MutationPlaceOrderArgs = {
-  id: Scalars["ID"]["input"];
+  input: PlaceOrderInput;
 };
 
 export class Order {
   customer: Customer;
   deliveryDate: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
+}
+
+export type PlaceOrderInput = {
+  deliveryDate: Scalars["String"]["input"];
+};
+
+export class PlaceOrderResponse {
+  code: Scalars["Int"]["output"];
+  order?: Maybe<Order>;
+  success: Scalars["Boolean"]["output"];
 }
 
 export class Query {
@@ -183,8 +193,11 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
   Mutation: ResolverTypeWrapper<{}>;
   Order: ResolverTypeWrapper<Order>;
-  Query: ResolverTypeWrapper<{}>;
+  PlaceOrderInput: PlaceOrderInput;
+  PlaceOrderResponse: ResolverTypeWrapper<PlaceOrderResponse>;
+  Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
+  Query: ResolverTypeWrapper<{}>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -194,8 +207,11 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars["ID"]["output"];
   Mutation: {};
   Order: Order;
-  Query: {};
+  PlaceOrderInput: PlaceOrderInput;
+  PlaceOrderResponse: PlaceOrderResponse;
+  Int: Scalars["Int"]["output"];
   Boolean: Scalars["Boolean"]["output"];
+  Query: {};
 }>;
 
 export type CustomerResolvers<
@@ -220,10 +236,10 @@ export type MutationResolvers<
     ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
 > = ResolversObject<{
   placeOrder?: Resolver<
-    Maybe<ResolversTypes["Order"]>,
+    ResolversTypes["PlaceOrderResponse"],
     ParentType,
     ContextType,
-    RequireFields<MutationPlaceOrderArgs, "id">
+    RequireFields<MutationPlaceOrderArgs, "input">
   >;
 }>;
 
@@ -235,6 +251,17 @@ export type OrderResolvers<
   customer?: Resolver<ResolversTypes["Customer"], ParentType, ContextType>;
   deliveryDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PlaceOrderResponseResolvers<
+  ContextType = Context,
+  ParentType extends
+    ResolversParentTypes["PlaceOrderResponse"] = ResolversParentTypes["PlaceOrderResponse"],
+> = ResolversObject<{
+  code?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  order?: Resolver<Maybe<ResolversTypes["Order"]>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -262,5 +289,6 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Customer?: CustomerResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
+  PlaceOrderResponse?: PlaceOrderResponseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 }>;

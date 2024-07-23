@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 
 import resolvers from "./resolvers/index";
+import { StoreAPI } from "./data-sources/store-api";
 
 const directory = dirname(fileURLToPath(import.meta.url));
 
@@ -23,6 +24,11 @@ const server = new ApolloServer({
 });
 
 startStandaloneServer(server, {
+  context: async () => ({
+    dataSources: {
+      storeApi: new StoreAPI(),
+    },
+  }),
   listen: { port: 4000 },
 })
   .then(({ url }) => {
