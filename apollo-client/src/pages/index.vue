@@ -13,15 +13,33 @@
 </template>
 
 <script setup lang="ts">
+import {
+  useTestQueryOperationQuery,
+  useTestMutationOperationMutation,
+} from "~/generated/graphql";
+
 useHead({
   title: "GraphQL Workshop",
 });
 
 const query = async () => {
-  console.warn("TODO");
+  const { onResult } = useTestQueryOperationQuery({
+    orderId: "1",
+    customerId: "1",
+  });
+
+  onResult(({ data }) => {
+    console.info(data);
+  });
 };
 const mutation = async () => {
-  console.warn("TODO");
+  const { onDone, mutate } = useTestMutationOperationMutation();
+
+  mutate({ input: { deliveryDate: "2024-01-01" } });
+
+  onDone(({ data }) => {
+    console.info(data);
+  });
 };
 </script>
 

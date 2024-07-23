@@ -1,0 +1,14 @@
+query TestQueryOperation($orderId: ID!, $customerId: ID!) {
+  order(id: $orderId) {
+    id
+    deliveryDate
+  }
+  customer(id: $customerId) {
+    id
+    firstName
+    orders {
+      id
+      deliveryDate
+    }
+  }
+}

@@ -1,0 +1,10 @@
+mutation TestMutationOperation($input: PlaceOrderInput!) {
+  placeOrder(input: $input) {
+    order {
+      id
+      deliveryDate
+    }
+    success
+    code
+  }
+}
