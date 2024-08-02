@@ -1,6 +1,6 @@
 # Apollo Server
 
-A simple Apollo Server instance for Jumbo's GraphQL workshops.
+A simple Apollo Server instance for customers for Jumbo's GraphQL workshops.
 
 ## Installation
 
@@ -33,9 +33,17 @@ The next step is to install the project's dependencies using NPM.
 npm install
 ```
 
+### Rover CLI
+
+To run an instance of Apollo Router and run commands against Apollo GraphOS, the Rover CLI must be installed. Follow [these instructions](https://www.apollographql.com/docs/rover/getting-started/) to install it.
+
 ### Running the project for the workshop
 
 To run the project, run `npm run dev`. This will spin up the server on port `4000`. You can access the server through `http://localhost:4000`.
+
+### Running Apollo Router
+
+To run an instance of Apollo Router, run `rover dev --supergraph-port 4500 --supergraph-config ./router/supergraph.yaml --elv2-license=accept`. This will run a local instance of Apollo Router on port `4500` using the local supergraph configuration. You can access the router through `http://localhost:4500`.
 
 ## Commands
 

@@ -20,6 +20,9 @@ export type Incremental<T> =
   | {
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -30,10 +33,58 @@ export type Scalars = {
   _FieldSet: { input: any; output: any };
 };
 
+export class Mutation {
+  placeOrder: PlaceOrderResponse;
+}
+
+export type MutationPlaceOrderArgs = {
+  input: PlaceOrderInput;
+};
+
+export class Order {
+  deliveryDate: Scalars["String"]["output"];
+  id: Scalars["ID"]["output"];
+}
+
+export type PlaceOrderInput = {
+  deliveryDate: Scalars["String"]["input"];
+};
+
+export class PlaceOrderResponse {
+  code: Scalars["Int"]["output"];
+  order?: Maybe<Order>;
+  success: Scalars["Boolean"]["output"];
+}
+
+export class Query {
+  order?: Maybe<Order>;
+  orders: Array<Order>;
+}
+
+export type QueryOrderArgs = {
+  id: Scalars["ID"]["input"];
+};
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
+
+export type ReferenceResolver<TResult, TReference, TContext> = (
+  reference: TReference,
+  context: TContext,
+  info?: GraphQLResolveInfo,
+) => Promise<TResult> | TResult;
+
+type ScalarCheck<T, S> = S extends true ? T : NullableCheck<T, S>;
+type NullableCheck<T, S> =
+  Maybe<T> extends T ? Maybe<ListCheck<NonNullable<T>, S>> : ListCheck<T, S>;
+type ListCheck<T, S> = T extends (infer U)[]
+  ? NullableCheck<U, S>[]
+  : GraphQLRecursivePick<T, S>;
+export type GraphQLRecursivePick<T, S> = {
+  [K in keyof T & keyof S]: ScalarCheck<T[K], S[K]>;
+};
 
 export type Resolver<
   TResult,
@@ -140,14 +191,86 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Order: ResolverTypeWrapper<Order>;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
+  ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
+  PlaceOrderInput: PlaceOrderInput;
+  PlaceOrderResponse: ResolverTypeWrapper<PlaceOrderResponse>;
+  Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
+  Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
+  Query: ResolverTypeWrapper<{}>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Boolean: Scalars["Boolean"]["output"];
+  Mutation: {};
+  Order: Order;
   String: Scalars["String"]["output"];
+  ID: Scalars["ID"]["output"];
+  PlaceOrderInput: PlaceOrderInput;
+  PlaceOrderResponse: PlaceOrderResponse;
+  Int: Scalars["Int"]["output"];
+  Boolean: Scalars["Boolean"]["output"];
+  Query: {};
 }>;
 
-export type Resolvers<ContextType = Context> = ResolversObject<{}>;
+export type MutationResolvers<
+  ContextType = Context,
+  ParentType extends
+    ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"],
+> = ResolversObject<{
+  placeOrder?: Resolver<
+    ResolversTypes["PlaceOrderResponse"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationPlaceOrderArgs, "input">
+  >;
+}>;
+
+export type OrderResolvers<
+  ContextType = Context,
+  ParentType extends
+    ResolversParentTypes["Order"] = ResolversParentTypes["Order"],
+> = ResolversObject<{
+  __resolveReference?: ReferenceResolver<
+    Maybe<ResolversTypes["Order"]>,
+    { __typename: "Order" } & GraphQLRecursivePick<ParentType, { id: true }>,
+    ContextType
+  >;
+  deliveryDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type PlaceOrderResponseResolvers<
+  ContextType = Context,
+  ParentType extends
+    ResolversParentTypes["PlaceOrderResponse"] = ResolversParentTypes["PlaceOrderResponse"],
+> = ResolversObject<{
+  code?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  order?: Resolver<Maybe<ResolversTypes["Order"]>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type QueryResolvers<
+  ContextType = Context,
+  ParentType extends
+    ResolversParentTypes["Query"] = ResolversParentTypes["Query"],
+> = ResolversObject<{
+  order?: Resolver<
+    Maybe<ResolversTypes["Order"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryOrderArgs, "id">
+  >;
+  orders?: Resolver<Array<ResolversTypes["Order"]>, ParentType, ContextType>;
+}>;
+
+export type Resolvers<ContextType = Context> = ResolversObject<{
+  Mutation?: MutationResolvers<ContextType>;
+  Order?: OrderResolvers<ContextType>;
+  PlaceOrderResponse?: PlaceOrderResponseResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+}>;

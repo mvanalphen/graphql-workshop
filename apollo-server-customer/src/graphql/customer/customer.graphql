@@ -1,6 +1,5 @@
-type Customer {
+type Customer @key(fields: "id") {
   id: ID!
   firstName: String
   lastName: String
-  orders: [Order!]!
 }

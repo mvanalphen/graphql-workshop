@@ -1,8 +1,8 @@
 {
-  "name": "apollo-server",
+  "name": "apollo-server-order",
   "private": true,
   "version": "1.0.0",
-  "description": "A simple Apollo Server instance for Jumbo's GraphQL workshops",
+  "description": "A simple Apollo Server instance for orders for Jumbo's GraphQL workshops",
   "main": "index.ts",
   "scripts": {
     "build": "webpack",
