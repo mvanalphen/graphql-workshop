@@ -1,4 +1,5 @@
 type Order @key(fields: "id") {
   id: ID!
   deliveryDate: String!
+  customer: Customer
 }

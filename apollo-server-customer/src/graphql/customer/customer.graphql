@@ -2,4 +2,6 @@ type Customer @key(fields: "id") {
   id: ID!
   firstName: String
   lastName: String
+  orders: [Order!]! @external
+  isActive: Boolean! @requires(fields: "orders { id }")
 }

@@ -1,4 +1,6 @@
 import { GraphQLResolveInfo } from "graphql";
+import { CustomerEntityRepresentation } from "../models/customer-entity-representation";
+import { OrderEntityRepresentation } from "../models/order-entity-representation";
 import { Context } from "../models/context";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -20,6 +22,7 @@ export type Incremental<T> =
   | {
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
   [P in K]-?: NonNullable<T[P]>;
 };
@@ -33,6 +36,11 @@ export type Scalars = {
   _FieldSet: { input: any; output: any };
 };
 
+export class Customer {
+  id: Scalars["ID"]["output"];
+  orders: Array<Order>;
+}
+
 export class Mutation {
   placeOrder: PlaceOrderResponse;
 }
@@ -42,6 +50,7 @@ export type MutationPlaceOrderArgs = {
 };
 
 export class Order {
+  customer?: Maybe<Customer>;
   deliveryDate: Scalars["String"]["output"];
   id: Scalars["ID"]["output"];
 }
@@ -191,12 +200,17 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Mutation: ResolverTypeWrapper<{}>;
-  Order: ResolverTypeWrapper<Order>;
-  String: ResolverTypeWrapper<Scalars["String"]["output"]>;
+  Customer: ResolverTypeWrapper<CustomerEntityRepresentation>;
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
+  Mutation: ResolverTypeWrapper<{}>;
+  Order: ResolverTypeWrapper<OrderEntityRepresentation>;
+  String: ResolverTypeWrapper<Scalars["String"]["output"]>;
   PlaceOrderInput: PlaceOrderInput;
-  PlaceOrderResponse: ResolverTypeWrapper<PlaceOrderResponse>;
+  PlaceOrderResponse: ResolverTypeWrapper<
+    Omit<PlaceOrderResponse, "order"> & {
+      order?: Maybe<ResolversTypes["Order"]>;
+    }
+  >;
   Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
   Query: ResolverTypeWrapper<{}>;
@@ -204,15 +218,33 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Mutation: {};
-  Order: Order;
-  String: Scalars["String"]["output"];
+  Customer: CustomerEntityRepresentation;
   ID: Scalars["ID"]["output"];
+  Mutation: {};
+  Order: OrderEntityRepresentation;
+  String: Scalars["String"]["output"];
   PlaceOrderInput: PlaceOrderInput;
-  PlaceOrderResponse: PlaceOrderResponse;
+  PlaceOrderResponse: Omit<PlaceOrderResponse, "order"> & {
+    order?: Maybe<ResolversParentTypes["Order"]>;
+  };
   Int: Scalars["Int"]["output"];
   Boolean: Scalars["Boolean"]["output"];
   Query: {};
+}>;
+
+export type CustomerResolvers<
+  ContextType = Context,
+  ParentType extends
+    ResolversParentTypes["Customer"] = ResolversParentTypes["Customer"],
+> = ResolversObject<{
+  __resolveReference?: ReferenceResolver<
+    Maybe<ResolversTypes["Customer"]>,
+    { __typename: "Customer" } & GraphQLRecursivePick<ParentType, { id: true }>,
+    ContextType
+  >;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  orders?: Resolver<Array<ResolversTypes["Order"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type MutationResolvers<
@@ -236,6 +268,11 @@ export type OrderResolvers<
   __resolveReference?: ReferenceResolver<
     Maybe<ResolversTypes["Order"]>,
     { __typename: "Order" } & GraphQLRecursivePick<ParentType, { id: true }>,
+    ContextType
+  >;
+  customer?: Resolver<
+    Maybe<ResolversTypes["Customer"]>,
+    ParentType,
     ContextType
   >;
   deliveryDate?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -269,6 +306,7 @@ export type QueryResolvers<
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  Customer?: CustomerResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   PlaceOrderResponse?: PlaceOrderResponseResolvers<ContextType>;
