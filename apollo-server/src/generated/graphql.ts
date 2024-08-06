@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from "graphql";
+import { OrderEntityRepresentation } from "../models/order-entity-representation";
 import { Context } from "../models/context";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -20,6 +21,7 @@ export type Incremental<T> =
   | {
       [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
     };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
   [P in K]-?: NonNullable<T[P]>;
 };
@@ -188,13 +190,19 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Customer: ResolverTypeWrapper<Customer>;
+  Customer: ResolverTypeWrapper<
+    Omit<Customer, "orders"> & { orders: Array<ResolversTypes["Order"]> }
+  >;
   String: ResolverTypeWrapper<Scalars["String"]["output"]>;
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
   Mutation: ResolverTypeWrapper<{}>;
-  Order: ResolverTypeWrapper<Order>;
+  Order: ResolverTypeWrapper<OrderEntityRepresentation>;
   PlaceOrderInput: PlaceOrderInput;
-  PlaceOrderResponse: ResolverTypeWrapper<PlaceOrderResponse>;
+  PlaceOrderResponse: ResolverTypeWrapper<
+    Omit<PlaceOrderResponse, "order"> & {
+      order?: Maybe<ResolversTypes["Order"]>;
+    }
+  >;
   Int: ResolverTypeWrapper<Scalars["Int"]["output"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]["output"]>;
   Query: ResolverTypeWrapper<{}>;
@@ -202,13 +210,17 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Customer: Customer;
+  Customer: Omit<Customer, "orders"> & {
+    orders: Array<ResolversParentTypes["Order"]>;
+  };
   String: Scalars["String"]["output"];
   ID: Scalars["ID"]["output"];
   Mutation: {};
-  Order: Order;
+  Order: OrderEntityRepresentation;
   PlaceOrderInput: PlaceOrderInput;
-  PlaceOrderResponse: PlaceOrderResponse;
+  PlaceOrderResponse: Omit<PlaceOrderResponse, "order"> & {
+    order?: Maybe<ResolversParentTypes["Order"]>;
+  };
   Int: Scalars["Int"]["output"];
   Boolean: Scalars["Boolean"]["output"];
   Query: {};

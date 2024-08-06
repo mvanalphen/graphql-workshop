@@ -19,6 +19,9 @@ const resolverPluginConfig: TypeScriptResolversPluginConfig = {
   optionalInfoArgument: true,
   skipTypename: true,
   useIndexSignature: true,
+  mappers: {
+    Order: "../models/order-entity-representation#OrderEntityRepresentation",
+  },
 };
 
 const config: CodegenConfig = {
