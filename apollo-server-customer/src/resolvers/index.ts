@@ -30,7 +30,3 @@ const resolvers: Resolvers = {
 };
 
 export default resolvers;
-
-// TODO: Add data loaders
-// TODO: See if data loaders resolve the issue of both the customer query and reference resolver fetching the user. Or use data source-level caching?
-// TODO: Update presentation - also mention data loaders should always be used
