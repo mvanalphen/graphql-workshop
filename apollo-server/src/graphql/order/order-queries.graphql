@@ -1,4 +1,4 @@
-type Query {
+extend type Query {
   orders: [Order!]!
   order(id: ID!): Order
 }
